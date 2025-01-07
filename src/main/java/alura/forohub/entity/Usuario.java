@@ -1,13 +1,18 @@
 package alura.forohub.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,14 +64,51 @@ public class Usuario {
 
     public Usuario(Long id, String nombre, String correoElectronico, String contrasena, Set<Perfil> perfiles) {
         this.id = id;
+
         this.nombre = nombre;
+
         this.correoElectronico = correoElectronico;
+
         this.contrasena = contrasena;
+
         this.perfiles = perfiles;
     }
-
     public Usuario() {
 
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return contrasena;
+    }
+
+    @Override
+    public String getUsername() {
+        return correoElectronico;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 
