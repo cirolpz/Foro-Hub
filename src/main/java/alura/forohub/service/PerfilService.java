@@ -64,12 +64,12 @@ public class PerfilService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        perfil.getUsuarios().add(usuario);
-        usuario.getPerfiles().add(perfil);
+        // Verifica si el usuario ya está asociado al perfil
+            perfil.getUsuarios().add(usuario);
+            perfilRepository.save(perfil);
 
-        perfilRepository.save(perfil);
-        usuarioRepository.save(usuario);
     }
+
 
     private PerfilDTO convertirAPerfilDTO(Perfil perfil) {
         return new PerfilDTO(perfil.getId(), perfil.getNombre());

@@ -1,5 +1,6 @@
 package alura.forohub.controller;
 
+import alura.forohub.dto.PerfilDTO;
 import alura.forohub.dto.UsuarioRequestDTO;
 import alura.forohub.dto.UsuarioResponseDTO;
 import alura.forohub.service.UsuarioService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -48,5 +50,10 @@ public class UsuarioController {
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/{id}/perfiles")
+    public ResponseEntity<Set<PerfilDTO>> listarPerfilesDeUsuario(@PathVariable Long id) {
+        Set<PerfilDTO> perfiles = usuarioService.listarPerfilesDeUsuario(id);
+        return ResponseEntity.ok(perfiles);
     }
 }
