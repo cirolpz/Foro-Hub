@@ -1,6 +1,6 @@
 package alura.forohub.service;
 
-import alura.forohub.dto.CursoDTO;
+import alura.forohub.dto.CursoResponseDTO;
 import alura.forohub.dto.TopicoRequestDTO;
 import alura.forohub.dto.TopicoResponseDTO;
 import alura.forohub.dto.UsuarioResponseDTO;
@@ -74,7 +74,7 @@ public class TopicoService {
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
-                new CursoDTO(curso.getId(), curso.getNombre())
+                new CursoResponseDTO(curso.getId(), curso.getNombre(), curso.getCategoria())
         );
     }
 
@@ -104,7 +104,7 @@ public class TopicoService {
                     topico.getFechaCreacion(),
                     topico.getStatus(),
                     new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
-                    new CursoDTO(curso.getId(), curso.getNombre())
+                    new CursoResponseDTO(curso.getId(), curso.getNombre(), curso.getCategoria())
             );
         });
     }
@@ -129,7 +129,7 @@ public class TopicoService {
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
-                new CursoDTO(curso.getId(), curso.getNombre())
+                new CursoResponseDTO(curso.getId(), curso.getNombre(), curso.getCategoria())
         );
     }
 
@@ -166,7 +166,7 @@ public class TopicoService {
                 topicoActualizado.getFechaCreacion(),
                 topicoActualizado.getStatus(),
                 new UsuarioResponseDTO(topicoActualizado.getAutor().getId(), topicoActualizado.getAutor().getNombre(), topicoActualizado.getAutor().getCorreoElectronico()),
-                new CursoDTO(topicoActualizado.getCurso().getId(), topicoActualizado.getCurso().getNombre())
+                new CursoResponseDTO(topicoActualizado.getCurso().getId(), topicoActualizado.getCurso().getNombre(), topicoActualizado.getCurso().getCategoria())
         );
     }
 
