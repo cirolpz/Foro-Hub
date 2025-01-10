@@ -3,7 +3,7 @@ package alura.forohub.service;
 import alura.forohub.dto.CursoDTO;
 import alura.forohub.dto.TopicoRequestDTO;
 import alura.forohub.dto.TopicoResponseDTO;
-import alura.forohub.dto.UsuarioDTO;
+import alura.forohub.dto.UsuarioResponseDTO;
 import alura.forohub.entity.Curso;
 import alura.forohub.entity.Topico;
 import alura.forohub.entity.Usuario;
@@ -73,7 +73,7 @@ public class TopicoService {
                 topico.getMessage(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
-                new UsuarioDTO(autor.getId(), autor.getNombre()),
+                new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
                 new CursoDTO(curso.getId(), curso.getNombre())
         );
     }
@@ -103,7 +103,7 @@ public class TopicoService {
                     topico.getMessage(),
                     topico.getFechaCreacion(),
                     topico.getStatus(),
-                    new UsuarioDTO(autor.getId(), autor.getNombre()),
+                    new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
                     new CursoDTO(curso.getId(), curso.getNombre())
             );
         });
@@ -128,7 +128,7 @@ public class TopicoService {
                 topico.getMessage(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
-                new UsuarioDTO(autor.getId(), autor.getNombre()),
+                new UsuarioResponseDTO(autor.getId(), autor.getNombre(), autor.getCorreoElectronico()),
                 new CursoDTO(curso.getId(), curso.getNombre())
         );
     }
@@ -165,7 +165,7 @@ public class TopicoService {
                 topicoActualizado.getMessage(),
                 topicoActualizado.getFechaCreacion(),
                 topicoActualizado.getStatus(),
-                new UsuarioDTO(topicoActualizado.getAutor().getId(), topicoActualizado.getAutor().getNombre()),
+                new UsuarioResponseDTO(topicoActualizado.getAutor().getId(), topicoActualizado.getAutor().getNombre(), topicoActualizado.getAutor().getCorreoElectronico()),
                 new CursoDTO(topicoActualizado.getCurso().getId(), topicoActualizado.getCurso().getNombre())
         );
     }
