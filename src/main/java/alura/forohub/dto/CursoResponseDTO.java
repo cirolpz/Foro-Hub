@@ -1,3 +1,12 @@
 package alura.forohub.dto;
 
-public record CursoResponseDTO(Long id, String nombre, String categoria) {}
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CursoResponseDTO(Long id,
+                               @NotNull
+                               @NotBlank
+                               String nombre,
+                               @NotNull
+                               @NotBlank
+                               String categoria) {}
