@@ -12,9 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/curso")
 public class CursoController {
-
     private final CursoService cursoService;
-
     public CursoController(CursoService cursoService) {
         this.cursoService = cursoService;
     }

@@ -1,4 +1,5 @@
 package alura.forohub.service;
+
 import alura.forohub.dto.PerfilDTO;
 import alura.forohub.dto.UsuarioRequestDTO;
 import alura.forohub.dto.UsuarioResponseDTO;
@@ -28,7 +29,6 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
         this.perfilRepository = perfilRepository;
     }
-
     public List<UsuarioResponseDTO> listarTodos() {
         return usuarioRepository.findAll()
                 .stream()
@@ -55,7 +55,6 @@ public class UsuarioService {
         );
         usuarioExistente.setNombre(usuarioRequestDTO.nombre());
         usuarioExistente.setCorreoElectronico(usuarioRequestDTO.email());
-        // Encripta la contraseña si se proporciona
         if (usuarioRequestDTO.contrasena() != null && !usuarioRequestDTO.contrasena().isEmpty()) {
             usuarioExistente.setContrasena(passwordEncoder.encode(usuarioRequestDTO.contrasena()));
         }
@@ -72,7 +71,6 @@ public class UsuarioService {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombre(usuarioDTO.nombre());
         nuevoUsuario.setCorreoElectronico(usuarioDTO.email());
-        // Encripta la contraseña antes de guardarla
         nuevoUsuario.setContrasena(passwordEncoder.encode(usuarioDTO.contrasena()));
         Usuario usuarioGuardado = usuarioRepository.save(nuevoUsuario);
         return convertirAUsuarioDTO(usuarioGuardado);
@@ -97,15 +95,8 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Perfil perfil = perfilRepository.findById(perfilId)
                 .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
-
-        // Vincula el perfil al usuario
         usuario.getPerfiles().add(perfil);
-
-        // Vincula el usuario al perfil (sincronización bidireccional)
         perfil.getUsuarios().add(usuario);
-
-        // Persistir cambios
         usuarioRepository.save(usuario);
     }
-
 }

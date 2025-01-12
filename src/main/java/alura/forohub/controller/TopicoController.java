@@ -23,19 +23,20 @@ public class TopicoController {
         this.topicoService = topicoService;
     }
 
-
     @PostMapping
     public ResponseEntity<TopicoResponseDTO> registrar(@RequestBody @Valid TopicoRequestDTO topicoRequestDTO) {
         TopicoResponseDTO   nuevoTopicoDTO = topicoService.registrar(topicoRequestDTO);
         URI location = URI.create("/topicos/" + nuevoTopicoDTO.id());
         return ResponseEntity.created(location).body(nuevoTopicoDTO);
     }
+
     @GetMapping
-    public ResponseEntity<Page<TopicoResponseDTO>> listadoTopicos(@RequestParam(required = false) String curso,   // Filtro por nombre del curso
-                                                           @RequestParam(required = false) LocalDateTime fecha_creacion,  // Filtro por fecha de creación
+    public ResponseEntity<Page<TopicoResponseDTO>> listadoTopicos(@RequestParam(required = false) String curso,
+                                                           @RequestParam(required = false) LocalDateTime fecha_creacion,
                                                            @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC ) Pageable paginacion) {
         return ResponseEntity.ok(topicoService.listado(curso, fecha_creacion, paginacion));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<TopicoResponseDTO>traerTopico(@PathVariable Long id) {
         return ResponseEntity.ok(topicoService.buscarPorId(id));
@@ -47,9 +48,10 @@ public class TopicoController {
         TopicoResponseDTO topicoActualizado = topicoService.actualizarPorId(id, topicoRequestDTO);
         return ResponseEntity.ok(topicoActualizado);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarTopico(@PathVariable Long id) {
-        topicoService.eliminarTopico(id); // Llama al servicio
-        return ResponseEntity.noContent().build(); // Retorna 204 No Content
+        topicoService.eliminarTopico(id);
+        return ResponseEntity.noContent().build();
     }
 }

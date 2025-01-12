@@ -1,10 +1,7 @@
 package alura.forohub.entity;
 
 import jakarta.persistence.*;
-
-
 import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name = "respuesta")
