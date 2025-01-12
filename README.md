@@ -1,28 +1,25 @@
 
-
 # API REST Foro-Hub con Spring Boot
 
 ## Descripción
 
-Esta API REST permite gestionar tópicos de un foro, incluyendo funcionalidades para crear, leer, actualizar y eliminar tópicos. Además, incluye validaciones para asegurar la consistencia de los datos enviados por el cliente.
+Foro-Hub es una API REST que permite gestionar tópicos en un foro. Las principales funcionalidades incluyen crear, leer, actualizar y eliminar Tópicos, así como gestionar Usuarios, Cursos, Perfiles y Respuestas. La API está protegida con **Spring Security**, utilizando **HMAC256** como algoritmo de encriptación y **Auth0** para la generación y validación de tokens JWT.
+
+El proyecto implementa **Docker**, migraciones con **Flyway**, y variables de entorno para facilitar la portabilidad y despliegue.
 
 ----------
 
 ## Tecnologías Utilizadas
 
 -   **Java** (JDK 17)
-    
--   **Spring Boot** (versión 2.7.0 o superior)
-    
+-   **Spring Boot** (2.7.0 o superior)
 -   **Maven**
-    
--   **Jakarta Validation** para validaciones
-    
--   **H2 Database** (en memoria para desarrollo)
-    
+-   **Jakarta Validation** (validaciones)
+-   **H2 Database** (base de datos en memoria para desarrollo)
 -   **Spring Data JPA**
-    
-    
+-   **Spring Security**
+-   **Flyway** (migraciones de base de datos)
+-   **Docker**
 
 ----------
 
@@ -32,28 +29,28 @@ Esta API REST permite gestionar tópicos de un foro, incluyendo funcionalidades 
 
 **POST /topicos**
 
-```
-{
+Ejemplo de petición:
+
+json
+
+Copiar código
+
+`{
     "title": "Mi primer tópico",
     "message": "Este es el mensaje del tópico",
     "autorId": 1,
     "cursoId": 1
-}
-```
+}` 
 
 **Validaciones:**
 
 -   Todos los campos son obligatorios.
-    
 -   `title` y `message` no deben estar vacíos.
-    
 
-**Respuesta:**
+**Respuestas:**
 
 -   **201 Created**: Tópico creado exitosamente.
-    
--   **400 Bad Request**: Si faltan campos o los datos son inválidos.
-    
+-   **400 Bad Request**: Datos inválidos o campos faltantes.
 
 ----------
 
@@ -61,15 +58,12 @@ Esta API REST permite gestionar tópicos de un foro, incluyendo funcionalidades 
 
 **GET /topicos/{id}**
 
--   Devuelve los detalles de un tópico específico.
-    
+Devuelve los detalles de un tópico específico.
 
-**Respuesta:**
+**Respuestas:**
 
--   **200 OK**: Si el tópico existe.
-    
--   **404 Not Found**: Si el tópico no existe.
-    
+-   **200 OK**: Detalles del tópico.
+-   **404 Not Found**: Tópico no encontrado.
 
 ----------
 
@@ -77,28 +71,28 @@ Esta API REST permite gestionar tópicos de un foro, incluyendo funcionalidades 
 
 **PUT /topicos/{id}**
 
-```
-{
+Ejemplo de petición:
+
+json
+
+Copiar código
+
+`{
     "title": "Título actualizado",
     "message": "Mensaje actualizado",
     "autorId": 1,
     "cursoId": 1
-}
-```
+}` 
 
 **Validaciones:**
 
 -   Todos los campos son obligatorios.
-    
 
-**Respuesta:**
+**Respuestas:**
 
--   **200 OK**: Si el tópico se actualizó exitosamente.
-    
--   **404 Not Found**: Si el tópico no existe.
-    
--   **400 Bad Request**: Si los datos son inválidos.
-    
+-   **200 OK**: Tópico actualizado exitosamente.
+-   **404 Not Found**: Tópico no encontrado.
+-   **400 Bad Request**: Datos inválidos.
 
 ----------
 
@@ -106,119 +100,141 @@ Esta API REST permite gestionar tópicos de un foro, incluyendo funcionalidades 
 
 **DELETE /topicos/{id}**
 
--   Elimina un tópico específico por su ID.
-    
+Elimina un tópico específico por su ID.
 
-**Respuesta:**
+**Respuestas:**
 
--   **204 No Content**: Si el tópico fue eliminado exitosamente.
-    
--   **404 Not Found**: Si el tópico no existe.
-    
+-   **204 No Content**: Eliminación exitosa.
+-   **404 Not Found**: Tópico no encontrado.
 
 ----------
 
 ## Validaciones Implementadas
 
--   `**@NotBlank**` **y** `**@NotNull**`: Para asegurar que los campos no estén vacíos ni nulos.
-    
+-   **Anotaciones de Validación**:
+    -   `@NotBlank` y `@NotNull`: Validan que los campos no estén vacíos o nulos.
 -   **Manejo de Excepciones**:
-    
-    -   `**ResponseStatusException**` para retornar errores HTTP adecuados.
-        
-    -   Verificación de existencia con `Optional.isPresent()` en consultas y eliminaciones.
-        
+    -   Uso de `ResponseStatusException` para retornar errores HTTP adecuados.
+    -   Verificación de existencia mediante `Optional.isPresent()`.
 
 ----------
 
 ## Instalación y Configuración
 
-1.  Clonar este repositorio:
-    
-    ```
-    git clone https://github.com/tu-usuario/nombre-del-repositorio.git
-    ```
-    
-2.  Configurar el archivo `application.properties` si deseas usar otra base de datos.
-    
-    ```
-    spring.datasource.url=jdbc:h2:mem:testdb
-    spring.datasource.driverClassName=org.h2.Driver
-    spring.datasource.username=sa
-    spring.datasource.password=
-    spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-    ```
-    
-3.  Ejecutar la aplicación:
-    
-    ```
-    mvn spring-boot:run
-    ```
-    
+### 1. Clonar el repositorio
+
+bash
+
+Copiar código
+
+`git clone https://github.com/tu-usuario/nombre-del-repositorio.git` 
+
+### 2. Configurar la base de datos
+
+El proyecto utiliza H2 Database para desarrollo. Si deseas utilizar otra base de datos, modifica el archivo `application.properties`. Ejemplo de configuración para H2:
+
+properties
+
+Copiar código
+
+`spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect` 
+
+### 3. Ejecutar el proyecto
+
+Con Maven:
+
+bash
+
+Copiar código
+
+`mvn spring-boot:run` 
+
+Con Docker:
+
+bash
+
+Copiar código
+
+`docker build -t foro-hub .
+docker run -p 8080:8080 foro-hub` 
 
 ----------
 
-## Ejecución de Pruebas
+## Ejemplos de Uso con cURL
 
-Puedes usar herramientas como **Postman** o **cURL** para probar los endpoints. Ejemplo con cURL:
+### Crear un Tópico
 
-### Crear un Tópico:
+bash
 
-```
-curl -X POST http://localhost:8080/topicos \
+Copiar código
+
+`curl -X POST http://localhost:8080/topicos \
 -H "Content-Type: application/json" \
 -d '{
     "title": "Mi primer tópico",
     "message": "Este es el mensaje del tópico",
     "autorId": 1,
     "cursoId": 1
-}'
-```
+}'` 
+
+### Obtener Detalle de un Tópico
+
+bash
+
+Copiar código
+
+`curl -X GET http://localhost:8080/topicos/1` 
 
 ----------
 
 ## Mejoras Futuras
 
--   Implementar seguridad con **Spring Security**.
-    
--   Agregar paginación y filtros en los listados.
-    
--   Crear pruebas unitarias con **JUnit** y **Mockito**.
-    
--   Documentación interactiva con **Swagger**.
-    
+-   Implementar pruebas unitarias y de integración con **JUnit** y **Mockito**.
+-   Añadir documentación interactiva utilizando **Swagger**.
 
 ----------
 
 ## Contribución
 
+¡Tu colaboración es bienvenida! Sigue estos pasos para contribuir:
+
 1.  Haz un fork del repositorio.
     
-2.  Crea una rama para tu funcionalidad o corrección:
+2.  Crea una nueva rama para tu funcionalidad o corrección:
     
-    ```
-    git checkout -b nombre-de-la-rama
-    ```
+    bash
     
-3.  Haz commit de tus cambios:
+    Copiar código
     
-    ```
-    git commit -m "Descripción de los cambios"
-    ```
+    `git checkout -b nombre-de-la-rama` 
     
-4.  Haz push a tu rama:
+3.  Realiza tus cambios y haz commit:
     
-    ```
-    git push origin nombre-de-la-rama
-    ```
+    bash
     
-5.  Abre un pull request en GitHub.
+    Copiar código
+    
+    `git commit -m "Descripción de los cambios"` 
+    
+4.  Haz push de tu rama al repositorio remoto:
+    
+    bash
+    
+    Copiar código
+    
+    `git push origin nombre-de-la-rama` 
+    
+5.  Abre un Pull Request en GitHub.
     
 
 ----------
 
 ## Autor
 
-[Ciro Lopez]  
-[lopezciromartin@gmail.com]  
-[Ciro](https://github.com/cirolpz)
+Ciro López  
+lopezciromartin@gmail.com  
+[GitHub: Ciro](https://github.com/cirolpz)
