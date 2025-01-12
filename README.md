@@ -1,6 +1,8 @@
 
 # API REST Foro-Hub con Spring Boot
 
+[![Video del Proyecto](https://img.youtube.com/vi/3LF_k-Gb7qM/maxresdefault.jpg)](https://youtu.be/3LF_k-Gb7qM)
+
 ## Descripción
 
 Foro-Hub es una API REST que permite gestionar tópicos en un foro. Las principales funcionalidades incluyen crear, leer, actualizar y eliminar Tópicos, así como gestionar Usuarios, Cursos, Perfiles y Respuestas. La API está protegida con **Spring Security**, utilizando **HMAC256** como algoritmo de encriptación y **Auth0** para la generación y validación de tokens JWT.
@@ -112,7 +114,7 @@ Elimina un tópico específico por su ID.
 ## Validaciones Implementadas
 
 -   **Anotaciones de Validación**:
-    -   `@NotBlank` y `@NotNull`: Validan que los campos no estén vacíos o nulos.
+    -   `@NotBlank` , `@NotNull` ,`@Email` ,`@Pattern` : Validan que los campos no estén vacíos o nulos.
 -   **Manejo de Excepciones**:
     -   Uso de `ResponseStatusException` para retornar errores HTTP adecuados.
     -   Verificación de existencia mediante `Optional.isPresent()`.
