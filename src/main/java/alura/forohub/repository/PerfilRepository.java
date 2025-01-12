@@ -2,6 +2,9 @@ package alura.forohub.repository;
 
 import alura.forohub.entity.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface PerfilRepository extends JpaRepository<Perfil, Long> {}
+@Repository
+public interface PerfilRepository extends JpaRepository<Perfil, Long> {
 
+}

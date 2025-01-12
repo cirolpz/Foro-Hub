@@ -4,7 +4,6 @@ import alura.forohub.dto.RespuestaDTO;
 import alura.forohub.entity.Respuesta;
 import alura.forohub.repository.RespuestaRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

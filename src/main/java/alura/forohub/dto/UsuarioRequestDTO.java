@@ -1,7 +1,6 @@
 package alura.forohub.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public record UsuarioRequestDTO(
         @NotNull
@@ -9,8 +8,10 @@ public record UsuarioRequestDTO(
         String nombre,
         @NotNull
         @NotBlank
+                @Email
         String email,
         @NotNull
         @NotBlank
-        String contrasena) {}
-
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&_]{8,}$", message = "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número.")
+        String contrasena) {
+}

@@ -1,27 +1,34 @@
 package alura.forohub.service;
+
+import alura.forohub.dto.PerfilDTO;
 import alura.forohub.dto.UsuarioRequestDTO;
 import alura.forohub.dto.UsuarioResponseDTO;
+import alura.forohub.entity.Perfil;
 import alura.forohub.entity.Usuario;
+import alura.forohub.repository.PerfilRepository;
 import alura.forohub.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder, PerfilRepository perfilRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.perfilRepository = perfilRepository;
     }
-
     public List<UsuarioResponseDTO> listarTodos() {
         return usuarioRepository.findAll()
                 .stream()
@@ -48,7 +55,6 @@ public class UsuarioService {
         );
         usuarioExistente.setNombre(usuarioRequestDTO.nombre());
         usuarioExistente.setCorreoElectronico(usuarioRequestDTO.email());
-        // Encripta la contraseña si se proporciona
         if (usuarioRequestDTO.contrasena() != null && !usuarioRequestDTO.contrasena().isEmpty()) {
             usuarioExistente.setContrasena(passwordEncoder.encode(usuarioRequestDTO.contrasena()));
         }
@@ -65,7 +71,6 @@ public class UsuarioService {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombre(usuarioDTO.nombre());
         nuevoUsuario.setCorreoElectronico(usuarioDTO.email());
-        // Encripta la contraseña antes de guardarla
         nuevoUsuario.setContrasena(passwordEncoder.encode(usuarioDTO.contrasena()));
         Usuario usuarioGuardado = usuarioRepository.save(nuevoUsuario);
         return convertirAUsuarioDTO(usuarioGuardado);
@@ -73,5 +78,25 @@ public class UsuarioService {
 
     private UsuarioResponseDTO convertirAUsuarioDTO(Usuario usuario) {
         return new UsuarioResponseDTO(usuario.getId(), usuario.getNombre(), usuario.getCorreoElectronico());
+    }
+
+    public Set<PerfilDTO> listarPerfilesDeUsuario(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+        return usuario.getPerfiles()
+                .stream()
+                .map(perfil -> new PerfilDTO(perfil.getId(), perfil.getNombre()))
+                .collect(Collectors.toSet());
+    }
+
+    @Transactional
+    public void asignarPerfil(Long usuarioId, Long perfilId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Perfil perfil = perfilRepository.findById(perfilId)
+                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+        usuario.getPerfiles().add(perfil);
+        perfil.getUsuarios().add(usuario);
+        usuarioRepository.save(usuario);
     }
 }

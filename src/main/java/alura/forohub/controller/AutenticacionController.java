@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/login")
 public class AutenticacionController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenService tokenService;
-
-
 
     @PostMapping
     public ResponseEntity autenticarUsuario(@RequestBody @Valid AutenticacionDTO autenticacionDTO){

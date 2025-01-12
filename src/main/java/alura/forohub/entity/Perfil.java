@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -21,7 +21,7 @@ public class Perfil {
     private String nombre;
 
     @ManyToMany(mappedBy = "perfiles")
-    private Set<Usuario> usuarios;
+    private Set<Usuario> usuarios = new HashSet<>();
     public Long getId() {
         return id;
     }
@@ -45,5 +45,4 @@ public class Perfil {
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-
 }

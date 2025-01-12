@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component
@@ -28,7 +27,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         System.out.println("El filtro está siendo llamado");
 
-        // Excluir rutas específicas como /login
         String uri = request.getRequestURI();
         if ("/login".equals(uri)) {
             filterChain.doFilter(request, response);

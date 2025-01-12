@@ -33,7 +33,6 @@ public class TopicoService {
     private CursoRepository cursoRepository;
 
     public TopicoResponseDTO registrar(@Valid TopicoRequestDTO topicoRequestDTO) {
-        // Verificar si ya existe un tópico con el mismo título y mensaje
         boolean existe = topicoRepository.existsByTitleAndMessage(
                 topicoRequestDTO.title(),
                 topicoRequestDTO.message()
@@ -44,7 +43,6 @@ public class TopicoService {
             );
         }
 
-        // Busca entidades relacionadas (autor y curso)
         Usuario autor = usuarioRepository.findById(topicoRequestDTO.autorId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuario no encontrado."
@@ -54,19 +52,17 @@ public class TopicoService {
                         HttpStatus.NOT_FOUND, "Curso no encontrado."
                 ));
 
-        // Crea y guarda el nuevo tópico
         Topico topico = new Topico(
-                null, // ID generado automáticamente
+                null,
                 topicoRequestDTO.title(),
                 topicoRequestDTO.message(),
                 LocalDateTime.now(),
-                "ABIERTO", // Estado inicial
+                "ABIERTO",
                 autor,
                 curso
         );
         topicoRepository.save(topico);
 
-        // Devuelve un DTO con los datos del tópico creado
         return new TopicoResponseDTO(
                 topico.getId(),
                 topico.getTitle(),
@@ -81,17 +77,14 @@ public class TopicoService {
     public Page<TopicoResponseDTO> listado(String cursoNombre, LocalDateTime fecha_creacion, Pageable paginacion) {
 
         Specification<Topico> spec = Specification.where(null);
-
         if (cursoNombre != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.like(root.get("curso").get("nombre"), "%" + cursoNombre + "%"));
         }
-
         if (fecha_creacion != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("fechaCreacion"), fecha_creacion)); // Usar "fechaCreacion" en lugar de "fecha_creacion"
+                    criteriaBuilder.equal(root.get("fechaCreacion"), fecha_creacion));
         }
-
         Page<Topico> topicos = topicoRepository.findAll(spec, paginacion);
 
         return topicos.map(topico -> {
@@ -114,7 +107,6 @@ public class TopicoService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Tópico no encontrado."
                 ));
-
         Usuario autor = topico.getAutor();
         Curso curso = topico.getCurso();
         if (topico.getTitle() == null || topico.getMessage() == null || topico.getFechaCreacion() == null || topico.getStatus() == null || autor.getId() == null || curso.getId() == null) {
@@ -146,7 +138,6 @@ public class TopicoService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "El tópico con ID " + id + " no existe."
                 ));
-
         topico.setTitle(requestDTO.title());
         topico.setMessage(requestDTO.message());
         topico.setAutor(usuarioRepository.findById(requestDTO.autorId())
@@ -172,9 +163,9 @@ public class TopicoService {
 
     public void eliminarTopico(Long id) {
         if (topicoRepository.findById(id).isPresent()) {
-            topicoRepository.deleteById(id); // Elimina el tópico
+            topicoRepository.deleteById(id);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tópico no encontrado."); // Maneja error 404
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tópico no encontrado.");
         }
     }
 }

@@ -1,11 +1,35 @@
+version: '3.8'
 services:
   mysql:
     image: 'mysql:latest'
     container_name: docker-mysql
     environment:
-      - 'MYSQL_DATABASE=ForoHub'
-      - 'MYSQL_ROOT_PASSWORD=root'
-      - 'MYSQL_USER=root'
-      - 'MYSQL_PASSWORD=root'
+      - MYSQL_DATABASE=ForoHub
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
     ports:
       - '3306:3306'
+    networks:
+      - foro-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: foro-hub-app
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ForoHub
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - JWT_SECRET=${JWT_SECRET}  # Para la variable JWT_SECRET
+    networks:
+      - foro-net
+
+networks:
+  foro-net:
+    driver: bridge
