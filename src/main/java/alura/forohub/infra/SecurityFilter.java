@@ -28,7 +28,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         System.out.println("El filtro está siendo llamado");
 
-        // Excluir rutas específicas como /login
         String uri = request.getRequestURI();
         if ("/login".equals(uri)) {
             filterChain.doFilter(request, response);
