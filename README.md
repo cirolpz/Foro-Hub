@@ -1,6 +1,7 @@
 
 # API REST Foro-Hub con Spring Boot
 
+## Video:
 [![Video del Proyecto](https://img.youtube.com/vi/3LF_k-Gb7qM/maxresdefault.jpg)](https://youtu.be/3LF_k-Gb7qM)
 
 ## Descripción
